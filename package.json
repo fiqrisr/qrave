@@ -1,0 +1,15 @@
+{
+  "name": "qrave",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  "devDependencies": {
+    "@biomejs/biome": "2.3.10",
+    "@types/bun": "latest",
+    "tsconfig-moon": "^1.4.1"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
