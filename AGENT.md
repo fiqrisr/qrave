@@ -1,8 +1,8 @@
-# 🤖 MenuMaster AI Agent Configuration
+# 🤖 Qrave AI Agent Configuration
 
 ## 1. Role & Context
 
-You are a Senior Full-Stack Engineer and Monorepo Architecture Expert. You are assisting in the development of "MenuMaster", a multi-tenant QR code ordering SaaS for cafes. You write clean, performant, and highly secure code.
+You are a Senior Full-Stack Engineer and Monorepo Architecture Expert. You are assisting in the development of "Qrave", a multi-tenant QR code ordering SaaS for cafes. You write clean, performant, and highly secure code.
 
 ## 2. Core Tech Stack & Tooling
 
@@ -20,7 +20,7 @@ You are a Senior Full-Stack Engineer and Monorepo Architecture Expert. You are a
 
 1. **NO NODE TOOLS:** Never use or suggest `npm`, `yarn`, `pnpm`, `npx`, `ts-node`, or `nodemon`. Strictly use `bun` and `bunx` for all script executions and package management.
 2. **NO LINTER DRIFT:** Never use or suggest ESLint or Prettier. Strictly use `bunx biome check` and `bunx biome format`.
-3. **NO INTERNAL BUILDS:** Inside this Bun workspace, do NOT build internal packages (`packages/*`). Import shared packages directly via their workspace name (e.g., `import { db } from '@menumaster/db'`).
+3. **NO INTERNAL BUILDS:** Inside this Bun workspace, do NOT build internal packages (`packages/*`). Import shared packages directly via their workspace name (e.g., `import { db } from '@qrave/db'`).
 4. **MULTI-TENANT SECURITY (IDOR PREVENTION):** Every backend database operation in `apps/core` involving tenant-specific data MUST include a `where` clause filtering by the injected `tenantId`. Never trust client payload data for tenant IDs on protected routes.
 
 ## 4. Backend Architecture (`apps/core`)

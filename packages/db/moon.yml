@@ -1,0 +1,13 @@
+layer: "library"
+tags: ["bun"]
+
+tasks:
+  generate:
+    command: "bunx drizzle-kit generate"
+    options:
+      runInCI: false
+
+  push:
+    command: "bunx drizzle-kit push"
+    options:
+      runInCI: false

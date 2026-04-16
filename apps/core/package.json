@@ -1,15 +1,19 @@
 {
   "name": "@qrave/core",
   "version": "0.0.1",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun run --watch src/index.ts"
   },
   "dependencies": {
+    "@qrave/db": "workspace:*",
+    "better-auth": "^1.2.7",
+    "drizzle-orm": "^0.44.2",
     "elysia": "latest"
   },
   "devDependencies": {
     "bun-types": "latest"
   },
-  "module": "src/index.js"
+  "module": "src/index.ts"
 }
