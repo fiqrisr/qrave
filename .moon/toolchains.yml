@@ -43,7 +43,7 @@ typescript:
 
   # Sync a project's dependencies as project references within the
   # project's `tsconfig.json` and the workspace root `tsconfig.json`.
-  syncProjectReferences: true
+  syncProjectReferences: false
 
   # Sync a project's project references as import aliases to the `paths`
   # compiler option in each applicable project.
