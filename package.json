@@ -3,7 +3,13 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "moon": "moon --color"
+  },
   "devDependencies": {
     "@biomejs/biome": "2.3.10",
     "@types/bun": "latest",

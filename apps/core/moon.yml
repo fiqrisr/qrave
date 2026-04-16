@@ -1,4 +1,5 @@
 type: "application"
+tags: ["bun"]
 
 tasks:
   dev:

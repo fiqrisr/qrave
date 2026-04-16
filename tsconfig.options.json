@@ -1,3 +1,6 @@
 {
-  "extends": "tsconfig-moon/tsconfig.json"
+  "extends": "tsconfig-moon/tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false
+  }
 }
