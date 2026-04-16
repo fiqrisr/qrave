@@ -1,12 +1,15 @@
 # https://moonrepo.dev/docs/config/toolchain
-$schema: './cache/schemas/toolchain.json'
+$schema: "./cache/schemas/toolchains.json"
 
 # extends: './shared/toolchain.yml'
 
-bun:
+javascript:
+  packageManager: "bun"
   # dependencyVersionFormat: 'workspace'
-  # rootPackageOnly: true
+  # rootPackageDependenciesOnly: true
   syncProjectWorkspaceDependencies: true
+
+bun: {}
 
 typescript:
   # When `syncProjectReferences` is enabled and a dependent project reference
