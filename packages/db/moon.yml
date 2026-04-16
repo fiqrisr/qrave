@@ -13,3 +13,9 @@ tasks:
     options:
       runInCI: false
       envFile: "/.env"
+
+  seed:
+    command: "bun run src/seed.ts"
+    options:
+      runInCI: false
+      envFile: "/.env"
