@@ -6,8 +6,10 @@ tasks:
     command: "bunx drizzle-kit generate"
     options:
       runInCI: false
+      envFile: "/.env"
 
   push:
     command: "bunx drizzle-kit push"
     options:
       runInCI: false
+      envFile: "/.env"

@@ -1,5 +1,4 @@
-import { products } from "@qrave/db";
-import { db } from "@qrave/db";
+import { db, products } from "@qrave/db";
 import { and, eq } from "drizzle-orm";
 import { Elysia, t } from "elysia";
 import { tenantGuard } from "../../middleware/tenant-guard";

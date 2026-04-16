@@ -4,28 +4,15 @@
     "target": "ES2021",
     "module": "ES2022",
     "moduleResolution": "node",
-    "types": [
-      "bun-types"
-    ],
+    "types": ["bun-types"],
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
     "paths": {
-      "@qrave/db": [
-        "../../packages/db/src/index.ts"
-      ],
-      "@qrave/db/*": [
-        "../../packages/db/src/*"
-      ]
+      "@qrave/db": ["../../packages/db/src/index.ts"],
+      "@qrave/db/*": ["../../packages/db/src/*"]
     }
   },
-  "references": [
-    {
-      "path": "../../packages/db"
-    }
-  ],
-  "include": [
-    "../../packages/db/**/*"
-  ]
+  "include": ["src"]
 }

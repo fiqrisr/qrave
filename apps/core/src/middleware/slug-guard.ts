@@ -1,5 +1,4 @@
-import { organizations } from "@qrave/db";
-import { db } from "@qrave/db";
+import { db, organizations } from "@qrave/db";
 import { eq } from "drizzle-orm";
 import { Elysia } from "elysia";
 
