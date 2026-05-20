@@ -19,7 +19,7 @@ export const auth = betterAuth({
     enabled: true,
   },
   database: drizzleAdapter(db, {
-    provider: "sqlite",
+    provider: "pg",
     schema: {
       user: schema.users,
       session: schema.sessions,
@@ -33,9 +33,13 @@ export const auth = betterAuth({
   plugins: [organization(), openAPI()],
 });
 
-let _openAPISchema: ReturnType<typeof auth.api.generateOpenAPISchema>;
-const getOpenAPISchema = async () =>
-  (_openAPISchema ??= auth.api.generateOpenAPISchema());
+let _openAPISchema: Awaited<ReturnType<typeof auth.api.generateOpenAPISchema>>;
+const getOpenAPISchema = async () => {
+  if (!_openAPISchema) {
+    _openAPISchema = await auth.api.generateOpenAPISchema();
+  }
+  return _openAPISchema;
+};
 
 export const AuthOpenAPI = {
   getPaths: (prefix = "/api/auth") =>
@@ -45,7 +49,9 @@ export const AuthOpenAPI = {
         const key = prefix + path;
         reference[key] = paths[path];
         for (const method of Object.keys(paths[path])) {
-          const operation = (reference[key] as Record<string, unknown>)[method] as {
+          const operation = (reference[key] as Record<string, unknown>)[
+            method
+          ] as {
             tags?: string[];
           };
           operation.tags = ["Better Auth"];

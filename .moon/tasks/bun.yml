@@ -21,14 +21,12 @@ tasks:
       - "tsconfig.*.json"
       # Root configs (extended from only)
       - "/tsconfig.options.json"
-    outputs:
-      # Matches `compilerOptions.outDir`
-      - "lib"
+    
 
-  format:
+  check:
     command:
       - "biome"
-      - "format"
+      - "check"
       - "--write"
     inputs:
       # Source and test files
