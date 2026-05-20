@@ -1,0 +1,22 @@
+layer: "application"
+tags: ["bun"]
+
+tasks:
+  dev:
+    command: "bun run --watch vite"
+    preset: "server"
+
+  build:
+    command: "bun run vite build"
+    options:
+      runInCI: false
+
+  check:
+    command: "bunx @biomejs/biome check src/"
+    options:
+      runInCI: false
+
+  typecheck:
+    command: "bunx tsc --noEmit"
+    options:
+      runInCI: false
