@@ -1,3 +1,4 @@
+import { Button, ScrollArea, Text, UnstyledButton } from "@qrave/ui";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { authClient, useSession } from "@/lib/auth-client";
@@ -39,39 +40,69 @@ export function OrgSwitcher() {
     : "Select cafe";
 
   return (
-    <div className="relative">
-      <button
-        type="button"
+    <div style={{ position: "relative" }}>
+      <UnstyledButton
+        w="100%"
+        p={8}
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-sm hover:bg-gray-50 w-full"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          border: "1px solid var(--mantine-color-gray-3)",
+          borderRadius: "var(--mantine-radius-md)",
+        }}
       >
-        <span className="truncate flex-1 text-left">{activeName}</span>
-        <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
-      </button>
+        <Text size="sm" truncate miw={0} style={{ flex: 1 }}>
+          {activeName}
+        </Text>
+        <ChevronsUpDown size={16} style={{ opacity: 0.5, flexShrink: 0 }} />
+      </UnstyledButton>
 
       {open && (
-        <div className="absolute left-0 top-full z-50 mt-1 w-full min-w-[200px] rounded-md border border-gray-200 bg-white shadow-lg">
+        <ScrollArea
+          style={{
+            position: "absolute",
+            left: 0,
+            top: "100%",
+            zIndex: 50,
+            marginTop: 4,
+            minWidth: 200,
+            width: "100%",
+            border: "1px solid var(--mantine-color-gray-2)",
+            borderRadius: "var(--mantine-radius-md)",
+            backgroundColor: "var(--mantine-color-white)",
+            boxShadow: "var(--mantine-shadow-md)",
+          }}
+        >
           {orgs.map((org) => (
-            <button
+            <Button
               key={org.id}
-              type="button"
-              onClick={() => switchOrg(org.id)}
+              variant="subtle"
+              fullWidth
+              size="compact-sm"
               disabled={loading}
-              className="flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-gray-100 text-left"
+              onClick={() => switchOrg(org.id)}
+              styles={{
+                root: { justifyContent: "flex-start" },
+                inner: { justifyContent: "flex-start" },
+              }}
+              leftSection={
+                org.id === activeOrgId ? <Check size={14} /> : undefined
+              }
             >
-              {org.id === activeOrgId && (
-                <Check className="h-4 w-4 text-indigo-600" />
-              )}
-              <span className={org.id === activeOrgId ? "font-medium" : ""}>
+              <Text size="sm" fw={org.id === activeOrgId ? 600 : 400}>
                 {org.name}
-              </span>
-            </button>
+              </Text>
+            </Button>
           ))}
 
           {orgs.length === 0 && (
-            <div className="px-3 py-2 text-sm text-gray-500">No cafes yet</div>
+            <Text size="sm" c="dimmed" p={8}>
+              No cafes yet
+            </Text>
           )}
-        </div>
+        </ScrollArea>
       )}
     </div>
   );
