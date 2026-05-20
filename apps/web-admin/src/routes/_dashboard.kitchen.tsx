@@ -1,3 +1,4 @@
+import { Title } from "@qrave/ui";
 import { createFileRoute } from "@tanstack/react-router";
 import { KanbanBoard } from "@/modules/kitchen";
 
@@ -7,8 +8,10 @@ export const Route = createFileRoute("/_dashboard/kitchen")({
 
 function KitchenPage() {
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Kitchen Display</h1>
+    <div>
+      <Title order={2} mb="md">
+        Kitchen Display
+      </Title>
       <KanbanBoard />
     </div>
   );

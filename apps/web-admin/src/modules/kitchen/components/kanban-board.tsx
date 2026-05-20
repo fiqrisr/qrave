@@ -1,3 +1,4 @@
+import { Grid, Group, Stack, Text, Title } from "@qrave/ui";
 import { useCallback, useEffect, useState } from "react";
 import { api } from "@/lib/api-client";
 import { useSession } from "@/lib/auth-client";
@@ -67,42 +68,48 @@ export function KanbanBoard() {
   }
 
   if (loading) {
-    return <div className="text-gray-500">Loading orders...</div>;
+    return <Text c="dimmed">Loading orders...</Text>;
   }
 
   return (
-    <div className="grid grid-cols-3 gap-6 h-[calc(100vh-8rem)]">
-      {COLUMNS.map(({ status, label }) => (
-        <div key={status} className="flex flex-col">
-          <h3 className="text-lg font-semibold mb-4 flex items-center justify-between">
-            {label}
-            <span className="text-sm font-normal text-gray-500">
-              {orders.filter((o) => o.status === status).length}
-            </span>
-          </h3>
-          <div className="flex-1 overflow-auto space-y-3">
-            {orders
-              .filter((o) => o.status === status)
-              .sort(
-                (a, b) =>
-                  new Date(a.createdAt).getTime() -
-                  new Date(b.createdAt).getTime(),
-              )
-              .map((order) => (
-                <OrderTicket
-                  key={order.id}
-                  order={order}
-                  onMarkReady={handleStatusUpdate}
-                />
-              ))}
-            {orders.filter((o) => o.status === status).length === 0 && (
-              <div className="text-sm text-gray-400 text-center py-8">
-                No {status} orders
-              </div>
-            )}
-          </div>
-        </div>
-      ))}
-    </div>
+    <Grid gap="md" style={{ height: "calc(100vh - 8rem)" }}>
+      {COLUMNS.map(({ status, label }) => {
+        const filtered = orders
+          .filter((o) => o.status === status)
+          .sort(
+            (a, b) =>
+              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+          );
+
+        return (
+          <Grid.Col key={status} span={4}>
+            <Stack gap="md">
+              <Group justify="space-between">
+                <Title order={3} size="lg">
+                  {label}
+                </Title>
+                <Text size="sm" c="dimmed">
+                  {filtered.length}
+                </Text>
+              </Group>
+
+              {filtered.length === 0 ? (
+                <Text size="sm" c="dimmed" ta="center" py="xl">
+                  No {status} orders
+                </Text>
+              ) : (
+                filtered.map((order) => (
+                  <OrderTicket
+                    key={order.id}
+                    order={order}
+                    onMarkReady={handleStatusUpdate}
+                  />
+                ))
+              )}
+            </Stack>
+          </Grid.Col>
+        );
+      })}
+    </Grid>
   );
 }
