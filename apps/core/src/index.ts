@@ -1,7 +1,9 @@
+import { cors } from "@elysiajs/cors";
 import { openapi } from "@elysiajs/openapi";
 import { Elysia } from "elysia";
 import { authController, getAuthOpenAPISchema } from "./modules/auth";
 import { categoryController } from "./modules/category";
+import { orderController } from "./modules/order";
 import { productController } from "./modules/product";
 import { publicController } from "./modules/public";
 import { ordersWs } from "./modules/ws";
@@ -10,6 +12,12 @@ import { ordersWs } from "./modules/ws";
 const authSchema = await getAuthOpenAPISchema();
 
 const app = new Elysia()
+  .use(
+    cors({
+      origin: ["http://localhost:3001"],
+      credentials: true,
+    }),
+  )
   .use(
     openapi({
       documentation: {
@@ -51,6 +59,11 @@ const app = new Elysia()
             description:
               "Manage menu products (CRUD). Requires an authenticated session with a valid tenant (organization).",
           },
+          {
+            name: "Orders",
+            description:
+              "Manage kitchen orders. List orders and update status (pending → preparing → ready). Requires an authenticated session with a valid tenant.",
+          },
         ],
         // Merge Better Auth paths and components
         paths: authSchema.paths as unknown as Record<
@@ -87,6 +100,7 @@ const app = new Elysia()
   .use(publicController)
   .use(categoryController)
   .use(productController)
+  .use(orderController)
   .use(ordersWs)
   .listen(3000);
 
