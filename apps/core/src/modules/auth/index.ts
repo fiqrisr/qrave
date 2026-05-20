@@ -15,8 +15,8 @@ if (!process.env.BETTER_AUTH_URL) {
 }
 
 export const auth = betterAuth({
-  baseURL: process.env.BETTER_AUTH_URL ?? "http://localhost:3001",
-  trustedOrigins: ["http://localhost:3001"],
+  baseURL: process.env.BETTER_AUTH_URL ?? "http://localhost:3000",
+  trustedOrigins: ["http://localhost:3000", "http://localhost:3001"],
   secret: process.env.BETTER_AUTH_SECRET,
   emailAndPassword: {
     enabled: true,
