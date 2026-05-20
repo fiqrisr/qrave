@@ -1,24 +1,43 @@
+$schema: "../cache/schemas/tasks.json"
+
 tasks:
   typecheck:
     command:
-      - 'tsc'
+      - "tsc"
       # Use incremental builds with project references
-      - '--build'
+      - "--build"
       # Always use pretty output
-      - '--pretty'
+      - "--pretty"
       # Use verbose logging to see affected projects
-      - '--verbose'
+      - "--verbose"
     inputs:
       # Source and test files
-      - 'src/**/*'
-      - 'tests/**/*'
+      - "src/**/*"
+      - "tests/**/*"
       # Type declarations
-      - 'types/**/*'
+      - "types/**/*"
       # Project configs
-      - 'tsconfig.json'
-      - 'tsconfig.*.json'
+      - "tsconfig.json"
+      - "tsconfig.*.json"
       # Root configs (extended from only)
-      - '/tsconfig.options.json'
+      - "/tsconfig.options.json"
     outputs:
       # Matches `compilerOptions.outDir`
-      - 'lib'
+      - "lib"
+
+  format:
+    command:
+      - "biome"
+      - "format"
+      - "--write"
+    inputs:
+      # Source and test files
+      - "src/**/*"
+      - "tests/**/*"
+      # Type declarations
+      - "types/**/*"
+      # Project configs
+      - "tsconfig.json"
+      - "tsconfig.*.json"
+      # Root configs (extended from only)
+      - "/tsconfig.options.json"
