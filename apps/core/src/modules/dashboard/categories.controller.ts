@@ -11,12 +11,16 @@ export const categoriesController = new Elysia({
   prefix: "/api/dashboard/categories",
 })
   .use(tenantGuard)
-  .get("/", async ({ tenantId }) => {
-    return db
-      .select()
-      .from(categories)
-      .where(eq(categories.organizationId, tenantId));
-  })
+  .get(
+    "/",
+    async ({ tenantId }) => {
+      return db
+        .select()
+        .from(categories)
+        .where(eq(categories.organizationId, tenantId));
+    },
+    { detail: { tags: ["Dashboard"], summary: "List categories" } },
+  )
   .post(
     "/",
     async ({ tenantId, body, set }) => {
@@ -35,7 +39,10 @@ export const categoriesController = new Elysia({
       set.status = 201;
       return created;
     },
-    { body: categoryBody },
+    {
+      body: categoryBody,
+      detail: { tags: ["Dashboard"], summary: "Create category" },
+    },
   )
   .put(
     "/:id",
@@ -59,24 +66,31 @@ export const categoriesController = new Elysia({
 
       return updated;
     },
-    { body: categoryBody },
+    {
+      body: categoryBody,
+      detail: { tags: ["Dashboard"], summary: "Update category" },
+    },
   )
-  .delete("/:id", async ({ tenantId, params, set }) => {
-    const [deleted] = await db
-      .delete(categories)
-      .where(
-        and(
-          eq(categories.id, params.id),
-          eq(categories.organizationId, tenantId),
-        ),
-      )
-      .returning();
+  .delete(
+    "/:id",
+    async ({ tenantId, params, set }) => {
+      const [deleted] = await db
+        .delete(categories)
+        .where(
+          and(
+            eq(categories.id, params.id),
+            eq(categories.organizationId, tenantId),
+          ),
+        )
+        .returning();
 
-    if (!deleted) {
-      set.status = 404;
-      return { error: "Category not found" };
-    }
+      if (!deleted) {
+        set.status = 404;
+        return { error: "Category not found" };
+      }
 
-    set.status = 204;
-    return null;
-  });
+      set.status = 204;
+      return null;
+    },
+    { detail: { tags: ["Dashboard"], summary: "Delete category" } },
+  );

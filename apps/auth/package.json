@@ -1,16 +1,12 @@
 {
-  "name": "@qrave/core",
+  "name": "@qrave/auth-service",
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun run --watch src/index.ts"
   },
   "dependencies": {
     "@qrave/auth": "workspace:*",
-    "@qrave/db": "workspace:*",
-    "better-auth": "^1.2.7",
-    "drizzle-orm": "^0.44.2",
     "@elysiajs/openapi": "latest",
     "elysia": "latest"
   },

@@ -23,12 +23,16 @@ export const productsController = new Elysia({
   prefix: "/api/dashboard/products",
 })
   .use(tenantGuard)
-  .get("/", async ({ tenantId }) => {
-    return db
-      .select()
-      .from(products)
-      .where(eq(products.organizationId, tenantId));
-  })
+  .get(
+    "/",
+    async ({ tenantId }) => {
+      return db
+        .select()
+        .from(products)
+        .where(eq(products.organizationId, tenantId));
+    },
+    { detail: { tags: ["Dashboard"], summary: "List products" } },
+  )
   .post(
     "/",
     async ({ tenantId, body, set }) => {
@@ -51,7 +55,10 @@ export const productsController = new Elysia({
       set.status = 201;
       return created;
     },
-    { body: productBody },
+    {
+      body: productBody,
+      detail: { tags: ["Dashboard"], summary: "Create product" },
+    },
   )
   .put(
     "/:id",
@@ -75,21 +82,31 @@ export const productsController = new Elysia({
 
       return updated;
     },
-    { body: productUpdateBody },
+    {
+      body: productUpdateBody,
+      detail: { tags: ["Dashboard"], summary: "Update product" },
+    },
   )
-  .delete("/:id", async ({ tenantId, params, set }) => {
-    const [deleted] = await db
-      .delete(products)
-      .where(
-        and(eq(products.id, params.id), eq(products.organizationId, tenantId)),
-      )
-      .returning();
+  .delete(
+    "/:id",
+    async ({ tenantId, params, set }) => {
+      const [deleted] = await db
+        .delete(products)
+        .where(
+          and(
+            eq(products.id, params.id),
+            eq(products.organizationId, tenantId),
+          ),
+        )
+        .returning();
 
-    if (!deleted) {
-      set.status = 404;
-      return { error: "Product not found" };
-    }
+      if (!deleted) {
+        set.status = 404;
+        return { error: "Product not found" };
+      }
 
-    set.status = 204;
-    return null;
-  });
+      set.status = 204;
+      return null;
+    },
+    { detail: { tags: ["Dashboard"], summary: "Delete product" } },
+  );

@@ -34,9 +34,18 @@ async function seed() {
   console.log("🌱 Seeding database...");
 
   // ── User ──────────────────────────────────────────────────────────────────
-  const hashedPassword = await Bun.password.hash("password123", {
-    algorithm: "bcrypt",
-  });
+  const { randomBytes, scrypt } = await import("node:crypto");
+  const salt = randomBytes(16).toString("hex");
+  const key = await new Promise<Buffer>((resolve, reject) =>
+    scrypt(
+      "password123".normalize("NFKC"),
+      salt,
+      64,
+      { N: 16384, r: 16, p: 1, maxmem: 128 * 16384 * 16 * 2 },
+      (err, k) => (err ? reject(err) : resolve(k as Buffer)),
+    ),
+  );
+  const hashedPassword = `${salt}:${key.toString("hex")}`;
 
   await db.insert(users).values({
     id: USER_ID,

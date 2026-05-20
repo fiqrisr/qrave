@@ -10,8 +10,6 @@
     "strict": true,
     "skipLibCheck": true,
     "paths": {
-      "@qrave/db": ["../../packages/db/src/index.ts"],
-      "@qrave/db/*": ["../../packages/db/src/*"],
       "@qrave/auth": ["../../packages/auth/src/index.ts"],
       "@qrave/auth/*": ["../../packages/auth/src/*"]
     }

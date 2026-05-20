@@ -16,27 +16,31 @@ const orderBody = t.Object({
 
 export const publicController = new Elysia({ prefix: "/api/m/:slug" })
   .use(slugGuard)
-  .get("/menu", async ({ organizationId }) => {
-    const cats = await db
-      .select()
-      .from(categories)
-      .where(eq(categories.organizationId, organizationId));
+  .get(
+    "/menu",
+    async ({ organizationId }) => {
+      const cats = await db
+        .select()
+        .from(categories)
+        .where(eq(categories.organizationId, organizationId));
 
-    const prods = await db
-      .select()
-      .from(products)
-      .where(
-        and(
-          eq(products.organizationId, organizationId),
-          eq(products.isAvailable, true),
-        ),
-      );
+      const prods = await db
+        .select()
+        .from(products)
+        .where(
+          and(
+            eq(products.organizationId, organizationId),
+            eq(products.isAvailable, true),
+          ),
+        );
 
-    return cats.map((cat) => ({
-      ...cat,
-      products: prods.filter((p) => p.categoryId === cat.id),
-    }));
-  })
+      return cats.map((cat) => ({
+        ...cat,
+        products: prods.filter((p) => p.categoryId === cat.id),
+      }));
+    },
+    { detail: { tags: ["Public"], summary: "Get cafe menu by slug" } },
+  )
   .post(
     "/order",
     async ({ organizationId, body, set, server }) => {
@@ -98,5 +102,8 @@ export const publicController = new Elysia({ prefix: "/api/m/:slug" })
       set.status = 201;
       return newOrder;
     },
-    { body: orderBody },
+    {
+      body: orderBody,
+      detail: { tags: ["Public"], summary: "Place an order" },
+    },
   );
