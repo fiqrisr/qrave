@@ -1,5 +1,5 @@
-import { auth } from "@qrave/auth";
 import { Elysia } from "elysia";
+import { auth } from "../auth";
 
 export const tenantGuard = new Elysia({ name: "tenantGuard" }).derive(
   { as: "scoped" },

@@ -18,31 +18,9 @@
       "version": "0.0.1",
       "dependencies": {
         "@elysiajs/openapi": "latest",
-        "@qrave/auth": "workspace:*",
-        "@qrave/db": "workspace:*",
-        "elysia": "latest",
-      },
-      "devDependencies": {
-        "bun-types": "latest",
-      },
-    },
-    "packages/auth": {
-      "name": "@qrave/auth",
-      "version": "0.0.1",
-      "dependencies": {
-        "@qrave/db": "workspace:*",
         "better-auth": "^1.2.7",
         "drizzle-orm": "^0.44.2",
-      },
-      "devDependencies": {
-        "bun-types": "latest",
-      },
-    },
-    "packages/db": {
-      "name": "@qrave/db",
-      "version": "0.0.1",
-      "dependencies": {
-        "drizzle-orm": "^0.44.2",
+        "elysia": "latest",
         "postgres": "latest",
       },
       "devDependencies": {
@@ -184,11 +162,7 @@
 
     "@opentelemetry/semantic-conventions": ["@opentelemetry/semantic-conventions@1.40.0", "", {}, "sha512-cifvXDhcqMwwTlTK04GBNeIe7yyo28Mfby85QXFe1Yk8nmi36Ab/5UQwptOx84SsoGNRg+EVSjwzfSZMy6pmlw=="],
 
-    "@qrave/auth": ["@qrave/auth@workspace:packages/auth"],
-
     "@qrave/core": ["@qrave/core@workspace:apps/core"],
-
-    "@qrave/db": ["@qrave/db@workspace:packages/db"],
 
     "@sinclair/typebox": ["@sinclair/typebox@0.34.45", "", {}, "sha512-qJcFVfCa5jxBFSuv7S5WYbA8XdeCPmhnaVVfX/2Y6L8WYg8sk3XY2+6W0zH+3mq1Cz+YC7Ki66HfqX6IHAwnkg=="],
 

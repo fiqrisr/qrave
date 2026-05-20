@@ -5,5 +5,18 @@ tasks:
   dev:
     command: "bun run --watch src/index.ts"
     preset: "server"
+
+  generate:
+    command: "bunx drizzle-kit generate"
     options:
-      envFile: "/.env"
+      runInCI: false
+
+  push:
+    command: "bunx drizzle-kit push"
+    options:
+      runInCI: false
+
+  seed:
+    command: "bun run src/db/seed.ts"
+    options:
+      runInCI: false

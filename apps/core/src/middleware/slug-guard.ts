@@ -1,6 +1,6 @@
-import { db, organizations } from "@qrave/db";
 import { eq } from "drizzle-orm";
 import { Elysia } from "elysia";
+import { db, organizations } from "../db";
 
 export const slugGuard = new Elysia({ name: "slugGuard" }).derive(
   { as: "scoped" },

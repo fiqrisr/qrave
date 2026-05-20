@@ -32,7 +32,7 @@ export const productController = new Elysia({
     async ({ tenantId }) => {
       return listProducts(tenantId);
     },
-    { detail: { tags: ["Dashboard"], summary: "List products" } },
+    { detail: { tags: ["Products"], summary: "List products" } },
   )
   .post(
     "/",
@@ -43,7 +43,7 @@ export const productController = new Elysia({
     },
     {
       body: productBody,
-      detail: { tags: ["Dashboard"], summary: "Create product" },
+      detail: { tags: ["Products"], summary: "Create product" },
     },
   )
   .put(
@@ -58,7 +58,7 @@ export const productController = new Elysia({
     },
     {
       body: productUpdateBody,
-      detail: { tags: ["Dashboard"], summary: "Update product" },
+      detail: { tags: ["Products"], summary: "Update product" },
     },
   )
   .delete(
@@ -72,5 +72,5 @@ export const productController = new Elysia({
       set.status = 204;
       return null;
     },
-    { detail: { tags: ["Dashboard"], summary: "Delete product" } },
+    { detail: { tags: ["Products"], summary: "Delete product" } },
   );

@@ -1,5 +1,5 @@
-import { auth } from "@qrave/auth";
 import { Elysia } from "elysia";
+import { auth } from "../../auth";
 
 export const authController = new Elysia({ prefix: "/api/auth" }).all(
   "/*",

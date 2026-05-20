@@ -1,8 +1,8 @@
-import * as schema from "@qrave/db";
-import { db } from "@qrave/db";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { openAPI, organization } from "better-auth/plugins";
+import * as schema from "../db";
+import { db } from "../db";
 
 if (!process.env.BETTER_AUTH_SECRET) {
   throw new Error("BETTER_AUTH_SECRET is missing in .env");
@@ -34,32 +34,38 @@ export const auth = betterAuth({
 });
 
 let _openAPISchema: Awaited<ReturnType<typeof auth.api.generateOpenAPISchema>>;
-const getOpenAPISchema = async () => {
+
+/**
+ * Generate the Better Auth OpenAPI schema with paths prefixed to /api/auth.
+ * Cached after first call.
+ */
+export async function getAuthOpenAPISchema() {
   if (!_openAPISchema) {
     _openAPISchema = await auth.api.generateOpenAPISchema();
   }
-  return _openAPISchema;
-};
 
-export const AuthOpenAPI = {
-  getPaths: (prefix = "/api/auth") =>
-    getOpenAPISchema().then(({ paths }) => {
-      const reference: typeof paths = Object.create(null);
-      for (const path of Object.keys(paths)) {
-        const key = prefix + path;
-        reference[key] = paths[path];
-        for (const method of Object.keys(paths[path])) {
-          const operation = (reference[key] as Record<string, unknown>)[
-            method
-          ] as {
-            tags?: string[];
-          };
-          operation.tags = ["Better Auth"];
-        }
-      }
-      return reference;
-    }) as Promise<unknown>,
-  components: getOpenAPISchema().then(
-    ({ components }) => components,
-  ) as Promise<unknown>,
-} as const;
+  const { paths, components } = _openAPISchema;
+  const prefix = "/api/auth";
+  const prefixedPaths: typeof paths = Object.create(null);
+
+  for (const [path, methods] of Object.entries(paths)) {
+    const key = prefix + path;
+    prefixedPaths[key] = methods;
+    for (const method of Object.keys(methods)) {
+      const operation = (prefixedPaths[key] as Record<string, unknown>)[
+        method
+      ] as {
+        tags?: string[];
+      };
+      operation.tags = ["Auth"];
+    }
+  }
+
+  return {
+    paths: prefixedPaths,
+    components: components ?? {},
+    tags: _openAPISchema.tags,
+    security: _openAPISchema.security,
+    servers: _openAPISchema.servers,
+  };
+}

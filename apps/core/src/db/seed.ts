@@ -8,7 +8,7 @@ import {
   organizations,
   products,
   users,
-} from "./index";
+} from "../db";
 
 const now = new Date();
 

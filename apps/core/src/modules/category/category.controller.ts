@@ -20,7 +20,7 @@ export const categoryController = new Elysia({
     async ({ tenantId }) => {
       return listCategories(tenantId);
     },
-    { detail: { tags: ["Dashboard"], summary: "List categories" } },
+    { detail: { tags: ["Categories"], summary: "List categories" } },
   )
   .post(
     "/",
@@ -31,7 +31,7 @@ export const categoryController = new Elysia({
     },
     {
       body: categoryBody,
-      detail: { tags: ["Dashboard"], summary: "Create category" },
+      detail: { tags: ["Categories"], summary: "Create category" },
     },
   )
   .put(
@@ -46,7 +46,7 @@ export const categoryController = new Elysia({
     },
     {
       body: categoryBody,
-      detail: { tags: ["Dashboard"], summary: "Update category" },
+      detail: { tags: ["Categories"], summary: "Update category" },
     },
   )
   .delete(
@@ -60,5 +60,5 @@ export const categoryController = new Elysia({
       set.status = 204;
       return null;
     },
-    { detail: { tags: ["Dashboard"], summary: "Delete category" } },
+    { detail: { tags: ["Categories"], summary: "Delete category" } },
   );

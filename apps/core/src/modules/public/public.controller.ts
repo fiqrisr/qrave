@@ -1,6 +1,6 @@
-import { categories, db, orderItems, orders, products } from "@qrave/db";
 import { and, eq, inArray } from "drizzle-orm";
 import { Elysia, t } from "elysia";
+import { categories, db, orderItems, orders, products } from "../../db";
 import { slugGuard } from "../../middleware/slug-guard";
 
 const orderBody = t.Object({

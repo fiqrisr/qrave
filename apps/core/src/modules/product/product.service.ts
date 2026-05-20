@@ -1,5 +1,5 @@
-import { db, products } from "@qrave/db";
 import { and, eq } from "drizzle-orm";
+import { db, products } from "../../db";
 
 export async function listProducts(organizationId: string) {
   return db
