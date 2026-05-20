@@ -1,3 +1,4 @@
+import { Card, Grid, Group, Stack, Text, Title } from "@qrave/ui";
 import { createFileRoute } from "@tanstack/react-router";
 import { LayoutDashboard, QrCode } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
@@ -15,44 +16,50 @@ function DashboardIndex() {
     : "";
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center gap-3">
-        <LayoutDashboard className="h-8 w-8 text-indigo-600" />
-        <h1 className="text-2xl font-bold">Dashboard</h1>
-      </div>
+    <Stack gap="xl">
+      <Group gap="sm">
+        <LayoutDashboard
+          size={32}
+          color="var(--mantine-color-qrave-primary-5)"
+        />
+        <Title order={2}>Dashboard</Title>
+      </Group>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        {/* Quick stats placeholder */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6">
-          <h2 className="text-lg font-semibold text-gray-900">Welcome back</h2>
-          <p className="mt-1 text-gray-500">
-            Manage your cafe menu and kitchen orders from here.
-          </p>
-        </div>
+      <Grid gap="md">
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <Card withBorder p="xl">
+            <Title order={4}>Welcome back</Title>
+            <Text c="dimmed" mt={4}>
+              Manage your cafe menu and kitchen orders from here.
+            </Text>
+          </Card>
+        </Grid.Col>
 
-        {/* QR Code card */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <QrCode className="h-5 w-5 text-indigo-600" />
-            <h2 className="text-lg font-semibold text-gray-900">
-              Menu QR Code
-            </h2>
-          </div>
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <Card withBorder p="xl">
+            <Group gap="sm" mb="md">
+              <QrCode size={20} color="var(--mantine-color-qrave-primary-5)" />
+              <Title order={4}>Menu QR Code</Title>
+            </Group>
 
-          {activeOrg ? (
-            <div className="flex flex-col items-center gap-4">
-              <QRCodeSVG value={menuUrl} size={180} />
-              <p className="text-xs text-gray-500 text-center break-all">
-                {menuUrl}
-              </p>
-            </div>
-          ) : (
-            <p className="text-gray-500">
-              Select a cafe to generate a QR code.
-            </p>
-          )}
-        </div>
-      </div>
-    </div>
+            {activeOrg ? (
+              <Stack align="center" gap="md">
+                <QRCodeSVG value={menuUrl} size={180} />
+                <Text
+                  size="xs"
+                  c="dimmed"
+                  ta="center"
+                  style={{ wordBreak: "break-all" }}
+                >
+                  {menuUrl}
+                </Text>
+              </Stack>
+            ) : (
+              <Text c="dimmed">Select a cafe to generate a QR code.</Text>
+            )}
+          </Card>
+        </Grid.Col>
+      </Grid>
+    </Stack>
   );
 }

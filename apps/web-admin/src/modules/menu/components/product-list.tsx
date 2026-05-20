@@ -1,3 +1,14 @@
+import {
+  Alert,
+  Badge,
+  Card,
+  Grid,
+  Group,
+  Loader,
+  Stack,
+  Text,
+  Title,
+} from "@qrave/ui";
 import { useState } from "react";
 import { api } from "@/lib/api-client";
 import { useSession } from "@/lib/auth-client";
@@ -71,102 +82,96 @@ export function ProductList() {
   });
 
   if (loading) {
-    return <div className="text-gray-500">Loading menu...</div>;
+    return <Loader />;
   }
 
   if (error) {
-    return <div className="text-red-600">{error}</div>;
+    return <Alert color="red">{error}</Alert>;
   }
 
   return (
-    <div className="space-y-8">
+    <Stack gap="xl">
       {categories.map((category) => {
         const categoryProducts = products.filter(
           (p) => p.categoryId === category.id,
         );
         return (
-          <div key={category.id} className="space-y-3">
-            <h3 className="text-lg font-semibold text-gray-800">
-              {category.name}
-              <span className="ml-2 text-sm font-normal text-gray-500">
+          <Stack key={category.id} gap="sm">
+            <Group>
+              <Title order={3}>{category.name}</Title>
+              <Text size="sm" c="dimmed">
                 ({categoryProducts.length} items)
-              </span>
-            </h3>
+              </Text>
+            </Group>
 
             {categoryProducts.length === 0 ? (
-              <p className="text-sm text-gray-400">No products yet</p>
+              <Text size="sm" c="dimmed">
+                No products yet
+              </Text>
             ) : (
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <Grid gap="sm">
                 {categoryProducts.map((product) => (
-                  <div
-                    key={product.id}
-                    className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
-                  >
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <h4 className="font-medium text-gray-900">
-                          {product.name}
-                        </h4>
-                        {product.description && (
-                          <p className="text-sm text-gray-500 mt-1">
-                            {product.description}
-                          </p>
-                        )}
-                      </div>
-                      <span
-                        className={`text-xs px-2 py-1 rounded-full ${
-                          product.isAvailable
-                            ? "bg-green-50 text-green-700"
-                            : "bg-red-50 text-red-700"
-                        }`}
-                      >
-                        {product.isAvailable ? "Available" : "Unavailable"}
-                      </span>
-                    </div>
-                    <p className="mt-2 text-lg font-semibold text-gray-900">
-                      ${(product.price / 100).toFixed(2)}
-                    </p>
-                  </div>
+                  <Grid.Col key={product.id} span={{ base: 12, sm: 6, lg: 4 }}>
+                    <Card withBorder>
+                      <Group justify="space-between" align="flex-start">
+                        <div>
+                          <Text fw={500}>{product.name}</Text>
+                          {product.description && (
+                            <Text size="sm" c="dimmed" mt={4}>
+                              {product.description}
+                            </Text>
+                          )}
+                        </div>
+                        <Badge
+                          color={product.isAvailable ? "green" : "red"}
+                          variant="light"
+                        >
+                          {product.isAvailable ? "Available" : "Unavailable"}
+                        </Badge>
+                      </Group>
+                      <Text fw={600} size="lg" mt="sm">
+                        ${(product.price / 100).toFixed(2)}
+                      </Text>
+                    </Card>
+                  </Grid.Col>
                 ))}
-              </div>
+              </Grid>
             )}
-          </div>
+          </Stack>
         );
       })}
 
-      {/* Uncategorized products */}
       {(() => {
         const uncategorized = products.filter((p) => !p.categoryId);
         if (uncategorized.length === 0) return null;
         return (
-          <div className="space-y-3">
-            <h3 className="text-lg font-semibold text-gray-800">
-              Uncategorized
-              <span className="ml-2 text-sm font-normal text-gray-500">
+          <Stack gap="sm">
+            <Group>
+              <Title order={3}>Uncategorized</Title>
+              <Text size="sm" c="dimmed">
                 ({uncategorized.length} items)
-              </span>
-            </h3>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              </Text>
+            </Group>
+            <Grid gap="sm">
               {uncategorized.map((product) => (
-                <div
-                  key={product.id}
-                  className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
-                >
-                  <h4 className="font-medium text-gray-900">{product.name}</h4>
-                  {product.description && (
-                    <p className="text-sm text-gray-500 mt-1">
-                      {product.description}
-                    </p>
-                  )}
-                  <p className="mt-2 text-lg font-semibold text-gray-900">
-                    ${(product.price / 100).toFixed(2)}
-                  </p>
-                </div>
+                <Grid.Col key={product.id} span={{ base: 12, sm: 6, lg: 4 }}>
+                  <Card withBorder>
+                    <Text fw={500}>{product.name}</Text>
+                    {product.description && (
+                      <Text size="sm" c="dimmed" mt={4}>
+                        {product.description}
+                      </Text>
+                    )}
+                    <Text fw={600} size="lg" mt="sm">
+                      ${(product.price / 100).toFixed(2)}
+                    </Text>
+                  </Card>
+                </Grid.Col>
               ))}
-            </div>
-          </div>
+            </Grid>
+          </Stack>
         );
       })()}
-    </div>
+    </Stack>
   );
 }

@@ -1,3 +1,4 @@
+import { Alert, Button, Group, Stack, TextInput, Title } from "@qrave/ui";
 import { useState } from "react";
 import { api } from "@/lib/api-client";
 import type { Category } from "@/modules/menu";
@@ -58,52 +59,28 @@ export function CategoryForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
-      <h3 className="text-lg font-semibold">
-        {isEdit ? "Edit Category" : "New Category"}
-      </h3>
+    <form onSubmit={handleSubmit}>
+      <Stack gap="md" maw={400}>
+        <Title order={3}>{isEdit ? "Edit Category" : "New Category"}</Title>
 
-      {error && (
-        <div className="text-red-600 text-sm bg-red-50 p-2 rounded">
-          {error}
-        </div>
-      )}
+        {error && <Alert color="red">{error}</Alert>}
 
-      <div>
-        <label
-          htmlFor="cat-name"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Name
-        </label>
-        <input
-          id="cat-name"
-          type="text"
+        <TextInput
+          label="Name"
           required
           value={name}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setName(e.target.value)
-          }
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          onChange={(e) => setName(e.currentTarget.value)}
         />
-      </div>
 
-      <div className="flex gap-2">
-        <button
-          type="submit"
-          disabled={submitting}
-          className="rounded-md bg-indigo-600 px-4 py-2 text-white font-medium hover:bg-indigo-700 disabled:opacity-50"
-        >
-          {submitting ? "Saving..." : isEdit ? "Update" : "Create"}
-        </button>
-        <button
-          type="button"
-          onClick={onCancel}
-          className="rounded-md border border-gray-300 px-4 py-2 text-gray-700 font-medium hover:bg-gray-50"
-        >
-          Cancel
-        </button>
-      </div>
+        <Group gap="xs">
+          <Button type="submit" disabled={submitting}>
+            {submitting ? "Saving..." : isEdit ? "Update" : "Create"}
+          </Button>
+          <Button variant="default" onClick={onCancel}>
+            Cancel
+          </Button>
+        </Group>
+      </Stack>
     </form>
   );
 }
