@@ -17,7 +17,15 @@ function AuthLayout() {
   const [mode, setMode] = useState<"login" | "register">("login");
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "var(--mantine-color-gray-0)",
+      }}
+    >
       {mode === "login" ? (
         <LoginForm
           onSuccess={() => globalThis.window.location.reload()}

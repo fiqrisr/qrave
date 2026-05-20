@@ -1,3 +1,4 @@
+import { Alert, Button, Stack, Text, TextInput, Title } from "@qrave/ui";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
@@ -54,70 +55,54 @@ function SetupPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-4 w-full max-w-md p-8 bg-white rounded-lg shadow"
-      >
-        <h2 className="text-2xl font-bold text-center">Create Your Cafe</h2>
-        <p className="text-center text-gray-500 text-sm">
-          You need a cafe to get started. Create one now.
-        </p>
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "var(--mantine-color-gray-0)",
+      }}
+    >
+      <form onSubmit={handleSubmit}>
+        <Stack
+          gap="md"
+          w={400}
+          p="xl"
+          bg="var(--mantine-color-white)"
+          style={{
+            borderRadius: "var(--mantine-radius-md)",
+            boxShadow: "var(--mantine-shadow-md)",
+          }}
+        >
+          <Title order={2} ta="center">
+            Create Your Cafe
+          </Title>
+          <Text size="sm" c="dimmed" ta="center">
+            You need a cafe to get started. Create one now.
+          </Text>
 
-        {error && (
-          <div className="text-red-600 text-sm bg-red-50 p-2 rounded">
-            {error}
-          </div>
-        )}
+          {error && <Alert color="red">{error}</Alert>}
 
-        <div>
-          <label
-            htmlFor="org-name"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Cafe Name
-          </label>
-          <input
-            id="org-name"
-            type="text"
+          <TextInput
+            label="Cafe Name"
             required
             value={name}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setName(e.target.value)
-            }
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            onChange={(e) => setName(e.currentTarget.value)}
           />
-        </div>
 
-        <div>
-          <label
-            htmlFor="org-slug"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Slug
-          </label>
-          <input
-            id="org-slug"
-            type="text"
+          <TextInput
+            label="Slug"
+            description="Auto-generated from name if left empty"
             placeholder={name.toLowerCase().replace(/\s+/g, "-")}
             value={slug}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setSlug(e.target.value)
-            }
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            onChange={(e) => setSlug(e.currentTarget.value)}
           />
-          <p className="mt-1 text-xs text-gray-400">
-            Auto-generated from name if left empty
-          </p>
-        </div>
 
-        <button
-          type="submit"
-          disabled={creating}
-          className="w-full rounded-md bg-indigo-600 px-4 py-2 text-white font-medium hover:bg-indigo-700 disabled:opacity-50"
-        >
-          {creating ? "Creating..." : "Create Cafe"}
-        </button>
+          <Button type="submit" fullWidth disabled={creating}>
+            {creating ? "Creating..." : "Create Cafe"}
+          </Button>
+        </Stack>
       </form>
     </div>
   );

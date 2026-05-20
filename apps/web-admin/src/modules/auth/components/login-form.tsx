@@ -1,3 +1,11 @@
+import {
+  Alert,
+  Button,
+  PasswordInput,
+  Stack,
+  TextInput,
+  Title,
+} from "@qrave/ui";
 import { useState } from "react";
 import { signIn } from "@/lib/auth-client";
 
@@ -26,70 +34,37 @@ export function LoginForm({ onSuccess, onSwitchToRegister }: LoginFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-sm">
-      <h2 className="text-2xl font-bold text-center">Sign In</h2>
+    <form onSubmit={handleSubmit}>
+      <Stack gap="md" w="100%" maw={380}>
+        <Title order={2} ta="center">
+          Sign In
+        </Title>
 
-      {error && (
-        <div className="text-red-600 text-sm bg-red-50 p-2 rounded">
-          {error}
-        </div>
-      )}
+        {error && <Alert color="red">{error}</Alert>}
 
-      <div>
-        <label
-          htmlFor="email"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Email
-        </label>
-        <input
-          id="email"
+        <TextInput
+          label="Email"
           type="email"
           required
           value={email}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setEmail(e.target.value)
-          }
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          onChange={(e) => setEmail(e.currentTarget.value)}
         />
-      </div>
 
-      <div>
-        <label
-          htmlFor="password"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Password
-        </label>
-        <input
-          id="password"
-          type="password"
+        <PasswordInput
+          label="Password"
           required
           value={password}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setPassword(e.target.value)
-          }
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          onChange={(e) => setPassword(e.currentTarget.value)}
         />
-      </div>
 
-      <button
-        type="submit"
-        className="w-full rounded-md bg-indigo-600 px-4 py-2 text-white font-medium hover:bg-indigo-700 transition-colors"
-      >
-        Sign In
-      </button>
+        <Button type="submit" fullWidth>
+          Sign In
+        </Button>
 
-      <p className="text-center text-sm text-gray-600">
-        Don&apos;t have an account?{" "}
-        <button
-          type="button"
-          onClick={onSwitchToRegister}
-          className="text-indigo-600 hover:underline"
-        >
-          Sign Up
-        </button>
-      </p>
+        <Button variant="subtle" size="compact-sm" onClick={onSwitchToRegister}>
+          Don&apos;t have an account? Sign Up
+        </Button>
+      </Stack>
     </form>
   );
 }
