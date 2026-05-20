@@ -2,7 +2,7 @@
 
 ## 1. Role & Context
 
-You are a Senior Full-Stack Engineer and Monorepo Architecture Expert. You are assisting in the development of "Qrave", a multi-tenant QR code ordering SaaS for cafes. You write clean, performant, and highly secure code.
+Senior Full-Stack Engineer + Monorepo Architecture Expert. Building "Qrave" — multi-tenant QR code ordering SaaS for cafes. Write clean, performant, secure code.
 
 ## 2. Core Tech Stack & Tooling
 
@@ -13,57 +13,57 @@ You are a Senior Full-Stack Engineer and Monorepo Architecture Expert. You are a
 - **Frontend Admin (`apps/web-admin`):** React + Vite
 - **Frontend Customer (`apps/web-customer`):** Next.js
 - **Database & ORM (`packages/db`):** Postgres (local via Docker Compose) + Drizzle ORM
-- **Authentication:** Better Auth (using the `organization` plugin for Multi-Tenancy)
+- **Authentication:** Better Auth (`organization` plugin for Multi-Tenancy)
 - **Validation:** TypeBox (native to Elysia via `t`)
 
 ## 3. 🛑 Critical Constraints (NEVER VIOLATE)
 
-1. **NO NODE TOOLS:** Never use or suggest `npm`, `yarn`, `pnpm`, `npx`, `ts-node`, or `nodemon`. Strictly use `bun` and `bunx` for all script executions and package management.
-2. **NO LINTER DRIFT:** Never use or suggest ESLint or Prettier. Always use `moon run <app/package>:check` to check formatting and lint. This runs Biome under the hood. Never call `biome` directly.
-3. **NO INTERNAL BUILDS:** Inside this Bun workspace, do NOT build internal packages (`packages/*`). Import shared packages directly via their workspace name (e.g., `import { db } from '@qrave/db'`).
-4. **MULTI-TENANT SECURITY (IDOR PREVENTION):** Every backend database operation in `apps/core` involving tenant-specific data MUST include a `where` clause filtering by the injected `tenantId`. Never trust client payload data for tenant IDs on protected routes.
+1. **NO NODE TOOLS:** Never use/suggest `npm`, `yarn`, `pnpm`, `npx`, `ts-node`, `nodemon`. Use `bun` + `bunx` exclusively.
+2. **NO LINTER DRIFT:** Never use/suggest ESLint or Prettier. Use `moon run <app/package>:check` for formatting + lint (runs Biome). Never call `biome` directly.
+3. **NO INTERNAL BUILDS:** Don't build internal packages (`packages/*`). Import via workspace name (e.g., `import { db } from '@qrave/db'`).
+4. **MULTI-TENANT SECURITY (IDOR PREVENTION):** Every `apps/core` DB op on tenant-specific data MUST filter by injected `tenantId` in `where` clause. Never trust client payload for tenant IDs on protected routes.
 
 ## 4. Backend Architecture (`apps/core`)
 
-1. **Feature-Based Modules:** Group code by feature domain (e.g., `src/modules/products/`, `src/modules/orders/`). Do NOT use global `controllers/` or `services/` folders.
-2. **Elysia Plugins:** Every module must export an Elysia instance that is consumed by the main `index.ts` using `.use()`.
-3. **Eden Treaty:** The `apps/core` main entry point MUST export `export type App = typeof app`. Frontend applications will consume this via `@elysiajs/eden` for end-to-end type safety.
-4. **Tenant Guard:** Always use the custom `tenantGuard` middleware on protected routes to extract the `activeOrganizationId` from the Better Auth session and inject `tenantId` into the Elysia context.
+1. **Feature-Based Modules:** Group by domain (e.g., `src/modules/products/`, `src/modules/orders/`). No global `controllers/` or `services/` folders.
+2. **Elysia Plugins:** Each module exports Elysia instance consumed by `index.ts` via `.use()`.
+3. **Eden Treaty:** `apps/core` MUST export `export type App = typeof app`. Frontends consume via `@elysiajs/eden` for end-to-end type safety.
+4. **Tenant Guard:** Use `tenantGuard` middleware on protected routes. Extracts `activeOrganizationId` from Better Auth session, injects `tenantId` into Elysia context.
 
 ## 5. Database Rules (`packages/db`)
 
-1. **Single Source of Truth:** All database schemas and the initialized Drizzle client live here.
-2. **Logical Isolation:** Every business entity in the schema (categories, products, orders) MUST have an `organizationId` column referencing the Better Auth `organization` table.
-3. **Migrations:** Run Drizzle schema generation and pushes ONLY from this package context (`moon run db:generate`, `moon run db:push`).
+1. **Single Source of Truth:** All schemas + initialized Drizzle client live here.
+2. **Logical Isolation:** Every business entity (categories, products, orders) MUST have `organizationId` column referencing Better Auth `organization` table.
+3. **Migrations:** Run Drizzle schema gen + pushes ONLY from this package (`moon run db:generate`, `moon run db:push`).
 
 ## 6. Real-Time (WebSockets)
 
-- When implementing WebSockets in Elysia, use room-based pub/sub.
-- Scope rooms strictly to the tenant (e.g., `ws.subscribe('org_${tenantId}:kitchen')`) to ensure orders are only broadcast to the correct cafe.
+- Use room-based pub/sub for Elysia WebSockets.
+- Scope rooms to tenant (e.g., `ws.subscribe('org_${tenantId}:kitchen')`) — orders broadcast only to correct cafe.
 
 ## 7. Type Checking
 
-- Always run `moon run <app/package>:typecheck` to type-check a specific app or package (e.g., `moon run core:typecheck`, `moon run db:typecheck`).
-- Run type checking **before** considering any task complete. This is mandatory.
-- Never call `tsc` directly — always use the Moonrepo task.
+- Run `moon run <app/package>:typecheck` (e.g., `moon run core:typecheck`, `moon run db:typecheck`).
+- **Mandatory** before task complete.
+- Never call `tsc` directly — use Moonrepo task.
 
 ## 8. Linting & Formatting
 
-- Always run `moon run <app/package>:check` to lint and format a specific app or package (e.g., `moon run core:check`, `moon run db:check`).
-- Run linting/formatting **before** considering any task complete. This is mandatory.
-- Never call `biome` directly — always use the Moonrepo task.
+- Run `moon run <app/package>:check` (e.g., `moon run core:check`, `moon run db:check`).
+- **Mandatory** before task complete.
+- Never call `biome` directly — use Moonrepo task.
 
 ## 9. Code Style & Conventions
 
-- **TypeScript:** Use strict TypeScript. Avoid `any` at all costs.
-- **Validation:** Use TypeBox `t.Object()` for all Elysia route validations (body, query, params).
-- **Control Flow:** Use `async/await`. Do not use `.then()` promise chaining.
-- **Error Handling:** Use Elysia's `set.status` to return proper HTTP status codes (400, 401, 403, 404) with clear string or JSON error messages.
+- **TypeScript:** Strict. Avoid `any`.
+- **Validation:** TypeBox `t.Object()` for all Elysia route validations (body, query, params).
+- **Control Flow:** `async/await` only. No `.then()` chaining.
+- **Error Handling:** Elysia `set.status` for HTTP status codes (400, 401, 403, 404) + clear string/JSON messages.
 
 ## 10. AI Communication & Output Behavior
 
 - Provide complete, copy-pasteable code blocks.
-- Do not use `// ... existing code ...` unless explicitly instructed to truncate for brevity.
-- Do not apologize or use filler conversational text. Be direct and concise.
-- If modifying database schemas, automatically remind the user to run the appropriate Moonrepo/Drizzle migration commands.
-- Always run `moon run <app/package>:check` and `moon run <app/package>:typecheck` on affected packages before finalizing any changes.
+- No `// ... existing code ...` unless instructed to truncate.
+- No apologies or filler. Direct + concise.
+- When modifying DB schemas, remind user to run Moonrepo/Drizzle migration commands.
+- Run `moon run <app/package>:check` + `moon run <app/package>:typecheck` on affected packages before finalizing changes.
