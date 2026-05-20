@@ -1,0 +1,14 @@
+layer: "library"
+tags: ["bun"]
+
+tasks:
+  check:
+    command: "biome check packages/ui/src/"
+    options:
+      runInCI: false
+      runFromWorkspaceRoot: true
+
+  typecheck:
+    command: "bunx tsc --noEmit"
+    options:
+      runInCI: false
