@@ -2,6 +2,7 @@
   "extends": "./tsconfig.options.json",
   "files": [],
   "references": [
-    { "path": "apps/core" }
+    { "path": "apps/core" },
+    { "path": "apps/web-admin" }
   ]
 }

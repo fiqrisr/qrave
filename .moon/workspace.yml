@@ -5,6 +5,10 @@ $schema: "./cache/schemas/workspace.json"
 
 projects:
   - "apps/*"
+  - "packages/*"
+
+constraints:
+  enforceLayerRelationships: false
 
 vcs:
   client: "git"
