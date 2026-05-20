@@ -1,41 +1,31 @@
-import { categories, db } from "@qrave/db";
-import { and, eq } from "drizzle-orm";
 import { Elysia, t } from "elysia";
 import { tenantGuard } from "../../middleware/tenant-guard";
+import {
+  createCategory,
+  deleteCategory,
+  listCategories,
+  updateCategory,
+} from "./category.service";
 
 const categoryBody = t.Object({
   name: t.String({ minLength: 1 }),
 });
 
-export const categoriesController = new Elysia({
+export const categoryController = new Elysia({
   prefix: "/api/dashboard/categories",
 })
   .use(tenantGuard)
   .get(
     "/",
     async ({ tenantId }) => {
-      return db
-        .select()
-        .from(categories)
-        .where(eq(categories.organizationId, tenantId));
+      return listCategories(tenantId);
     },
     { detail: { tags: ["Dashboard"], summary: "List categories" } },
   )
   .post(
     "/",
     async ({ tenantId, body, set }) => {
-      const now = new Date();
-      const [created] = await db
-        .insert(categories)
-        .values({
-          id: crypto.randomUUID(),
-          organizationId: tenantId,
-          name: body.name,
-          createdAt: now,
-          updatedAt: now,
-        })
-        .returning();
-
+      const created = await createCategory(tenantId, body);
       set.status = 201;
       return created;
     },
@@ -47,23 +37,11 @@ export const categoriesController = new Elysia({
   .put(
     "/:id",
     async ({ tenantId, params, body, set }) => {
-      const now = new Date();
-      const [updated] = await db
-        .update(categories)
-        .set({ name: body.name, updatedAt: now })
-        .where(
-          and(
-            eq(categories.id, params.id),
-            eq(categories.organizationId, tenantId),
-          ),
-        )
-        .returning();
-
+      const updated = await updateCategory(tenantId, params.id, body);
       if (!updated) {
         set.status = 404;
         return { error: "Category not found" };
       }
-
       return updated;
     },
     {
@@ -74,21 +52,11 @@ export const categoriesController = new Elysia({
   .delete(
     "/:id",
     async ({ tenantId, params, set }) => {
-      const [deleted] = await db
-        .delete(categories)
-        .where(
-          and(
-            eq(categories.id, params.id),
-            eq(categories.organizationId, tenantId),
-          ),
-        )
-        .returning();
-
+      const deleted = await deleteCategory(tenantId, params.id);
       if (!deleted) {
         set.status = 404;
         return { error: "Category not found" };
       }
-
       set.status = 204;
       return null;
     },

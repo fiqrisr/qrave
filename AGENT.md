@@ -12,14 +12,14 @@ You are a Senior Full-Stack Engineer and Monorepo Architecture Expert. You are a
 - **Backend (`apps/core`):** Elysia.js
 - **Frontend Admin (`apps/web-admin`):** React + Vite
 - **Frontend Customer (`apps/web-customer`):** Next.js
-- **Database & ORM (`packages/db`):** SQLite (`bun:sqlite` for local, Turso for prod) + Drizzle ORM
+- **Database & ORM (`packages/db`):** Postgres (local via Docker Compose) + Drizzle ORM
 - **Authentication:** Better Auth (using the `organization` plugin for Multi-Tenancy)
 - **Validation:** TypeBox (native to Elysia via `t`)
 
 ## 3. 🛑 Critical Constraints (NEVER VIOLATE)
 
 1. **NO NODE TOOLS:** Never use or suggest `npm`, `yarn`, `pnpm`, `npx`, `ts-node`, or `nodemon`. Strictly use `bun` and `bunx` for all script executions and package management.
-2. **NO LINTER DRIFT:** Never use or suggest ESLint or Prettier. Strictly use `bunx biome check` and `bunx biome format`.
+2. **NO LINTER DRIFT:** Never use or suggest ESLint or Prettier. Always use `moon run <app/package>:check` to check formatting and lint. This runs Biome under the hood. Never call `biome` directly.
 3. **NO INTERNAL BUILDS:** Inside this Bun workspace, do NOT build internal packages (`packages/*`). Import shared packages directly via their workspace name (e.g., `import { db } from '@qrave/db'`).
 4. **MULTI-TENANT SECURITY (IDOR PREVENTION):** Every backend database operation in `apps/core` involving tenant-specific data MUST include a `where` clause filtering by the injected `tenantId`. Never trust client payload data for tenant IDs on protected routes.
 
@@ -41,16 +41,29 @@ You are a Senior Full-Stack Engineer and Monorepo Architecture Expert. You are a
 - When implementing WebSockets in Elysia, use room-based pub/sub.
 - Scope rooms strictly to the tenant (e.g., `ws.subscribe('org_${tenantId}:kitchen')`) to ensure orders are only broadcast to the correct cafe.
 
-## 7. Code Style & Conventions
+## 7. Type Checking
+
+- Always run `moon run <app/package>:typecheck` to type-check a specific app or package (e.g., `moon run core:typecheck`, `moon run db:typecheck`).
+- Run type checking **before** considering any task complete. This is mandatory.
+- Never call `tsc` directly — always use the Moonrepo task.
+
+## 8. Linting & Formatting
+
+- Always run `moon run <app/package>:check` to lint and format a specific app or package (e.g., `moon run core:check`, `moon run db:check`).
+- Run linting/formatting **before** considering any task complete. This is mandatory.
+- Never call `biome` directly — always use the Moonrepo task.
+
+## 9. Code Style & Conventions
 
 - **TypeScript:** Use strict TypeScript. Avoid `any` at all costs.
 - **Validation:** Use TypeBox `t.Object()` for all Elysia route validations (body, query, params).
 - **Control Flow:** Use `async/await`. Do not use `.then()` promise chaining.
 - **Error Handling:** Use Elysia's `set.status` to return proper HTTP status codes (400, 401, 403, 404) with clear string or JSON error messages.
 
-## 8. AI Communication & Output Behavior
+## 10. AI Communication & Output Behavior
 
 - Provide complete, copy-pasteable code blocks.
 - Do not use `// ... existing code ...` unless explicitly instructed to truncate for brevity.
 - Do not apologize or use filler conversational text. Be direct and concise.
 - If modifying database schemas, automatically remind the user to run the appropriate Moonrepo/Drizzle migration commands.
+- Always run `moon run <app/package>:check` and `moon run <app/package>:typecheck` on affected packages before finalizing any changes.

@@ -1,11 +1,27 @@
+import { auth } from "@qrave/auth";
 import { Elysia, t } from "elysia";
 
 export const ordersWs = new Elysia().ws("/ws/orders", {
   query: t.Object({
     tenantId: t.String(),
   }),
-  open(ws) {
+  async open(ws) {
+    const session = await auth.api.getSession({
+      headers: ws.data.headers,
+    });
+
+    if (!session) {
+      ws.close(4001, "Unauthorized");
+      return;
+    }
+
     const { tenantId } = ws.data.query;
+
+    if (session.session.activeOrganizationId !== tenantId) {
+      ws.close(4003, "Forbidden: tenant mismatch");
+      return;
+    }
+
     ws.subscribe(`room:org_${tenantId}:kitchen`);
   },
   close(ws) {

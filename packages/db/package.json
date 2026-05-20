@@ -8,10 +8,10 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "drizzle-orm": "^0.44.2"
+    "drizzle-orm": "^0.44.2",
+    "postgres": "latest"
   },
   "devDependencies": {
-    "@libsql/client": "^0.14.0",
     "bun-types": "latest",
     "drizzle-kit": "^0.31.1"
   }

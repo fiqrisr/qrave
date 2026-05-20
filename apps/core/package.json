@@ -9,8 +9,6 @@
   "dependencies": {
     "@qrave/auth": "workspace:*",
     "@qrave/db": "workspace:*",
-    "better-auth": "^1.2.7",
-    "drizzle-orm": "^0.44.2",
     "@elysiajs/openapi": "latest",
     "elysia": "latest"
   },

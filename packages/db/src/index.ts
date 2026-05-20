@@ -1,10 +1,12 @@
-import { Database } from "bun:sqlite";
-import { drizzle } from "drizzle-orm/bun-sqlite";
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
 import * as schema from "./schema";
 
-const dbUrl = (process.env.DATABASE_URL ?? "local.db").replace(/^file:/, "");
-const sqlite = new Database(dbUrl);
+const connectionString =
+  process.env.DATABASE_URL ??
+  "postgresql://postgres:postgres@localhost:5432/qrave";
+const sql = postgres(connectionString, { max: 10 });
 
-export const db = drizzle(sqlite, { schema });
+export const db = drizzle(sql, { schema });
 
 export * from "./schema";

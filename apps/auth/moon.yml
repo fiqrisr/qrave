@@ -1,9 +1,0 @@
-layer: "application"
-tags: ["bun"]
-
-tasks:
-  dev:
-    command: "bun run --watch src/index.ts"
-    preset: "server"
-    options:
-      envFile: "/.env"

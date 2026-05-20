@@ -1,7 +1,11 @@
-import { db, products } from "@qrave/db";
-import { and, eq } from "drizzle-orm";
 import { Elysia, t } from "elysia";
 import { tenantGuard } from "../../middleware/tenant-guard";
+import {
+  createProduct,
+  deleteProduct,
+  listProducts,
+  updateProduct,
+} from "./product.service";
 
 const productBody = t.Object({
   name: t.String({ minLength: 1 }),
@@ -19,39 +23,21 @@ const productUpdateBody = t.Object({
   categoryId: t.Optional(t.String()),
 });
 
-export const productsController = new Elysia({
+export const productController = new Elysia({
   prefix: "/api/dashboard/products",
 })
   .use(tenantGuard)
   .get(
     "/",
     async ({ tenantId }) => {
-      return db
-        .select()
-        .from(products)
-        .where(eq(products.organizationId, tenantId));
+      return listProducts(tenantId);
     },
     { detail: { tags: ["Dashboard"], summary: "List products" } },
   )
   .post(
     "/",
     async ({ tenantId, body, set }) => {
-      const now = new Date();
-      const [created] = await db
-        .insert(products)
-        .values({
-          id: crypto.randomUUID(),
-          organizationId: tenantId,
-          categoryId: body.categoryId ?? null,
-          name: body.name,
-          description: body.description ?? null,
-          price: body.price,
-          isAvailable: body.isAvailable ?? true,
-          createdAt: now,
-          updatedAt: now,
-        })
-        .returning();
-
+      const created = await createProduct(tenantId, body);
       set.status = 201;
       return created;
     },
@@ -63,23 +49,11 @@ export const productsController = new Elysia({
   .put(
     "/:id",
     async ({ tenantId, params, body, set }) => {
-      const now = new Date();
-      const [updated] = await db
-        .update(products)
-        .set({ ...body, updatedAt: now })
-        .where(
-          and(
-            eq(products.id, params.id),
-            eq(products.organizationId, tenantId),
-          ),
-        )
-        .returning();
-
+      const updated = await updateProduct(tenantId, params.id, body);
       if (!updated) {
         set.status = 404;
         return { error: "Product not found" };
       }
-
       return updated;
     },
     {
@@ -90,21 +64,11 @@ export const productsController = new Elysia({
   .delete(
     "/:id",
     async ({ tenantId, params, set }) => {
-      const [deleted] = await db
-        .delete(products)
-        .where(
-          and(
-            eq(products.id, params.id),
-            eq(products.organizationId, tenantId),
-          ),
-        )
-        .returning();
-
+      const deleted = await deleteProduct(tenantId, params.id);
       if (!deleted) {
         set.status = 404;
         return { error: "Product not found" };
       }
-
       set.status = 204;
       return null;
     },

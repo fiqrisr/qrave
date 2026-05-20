@@ -7,7 +7,7 @@ Database schema and client for Qrave — shared across all applications.
 This package provides:
 
 - **Drizzle ORM** schema definitions
-- **Database client** configured with `bun:sqlite`
+- **Database client** configured with Postgres (via `postgres` + Drizzle)
 - **Type-safe exports** for all tables
 
 ## Schema
@@ -47,16 +47,18 @@ const orgProducts = await db
 
 ## Database Client
 
-The client is configured to use `bun:sqlite`:
+The client is configured to use Postgres via the `postgres` package and Drizzle's Postgres adapter:
 
-```typescript
-// packages/db/src/index.ts
-import { Database } from "bun:sqlite";
-import { drizzle } from "drizzle-orm/bun-sqlite";
+```/dev/null/example.ts#L1-8
+import postgres from 'postgres';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import * as schema from './schema';
 
-const sqlite = new Database(process.env.DATABASE_URL ?? "local.db");
-export const db = drizzle(sqlite, { schema });
+const sql = postgres(process.env.DATABASE_URL ?? 'postgresql://postgres:postgres@localhost:5432/qrave');
+export const db = drizzle(sql, { schema });
 ```
+
+For local development a Postgres instance is provided in `infra/docker-compose.yml`.
 
 ## Migrations
 

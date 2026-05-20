@@ -19,7 +19,7 @@ qrave/
 - **Runtime:** Bun v1.3+
 - **Monorepo:** Moonrepo v2
 - **Backend:** Elysia.js
-- **Database:** SQLite (bun:sqlite) + Drizzle ORM
+- **Database:** Postgres (local via Docker Compose) + Drizzle ORM
 - **Auth:** Better Auth with organization plugin
 - **Real-time:** WebSockets
 
@@ -38,11 +38,20 @@ bun install
 
 ### Database Setup
 
+Start a local Postgres instance with Docker Compose:
+
 ```bash
-# Generate and push migrations
+cd infra
+docker compose up -d
+```
+
+Then generate and push migrations:
+
+```bash
 moon run db:generate
 moon run db:push
 ```
+
 
 ### Run Development Server
 
@@ -63,12 +72,12 @@ moon run core:dev
 
 ## Environment Variables
 
-Create a `.env` file in `apps/core/`:
+Create a `.env` file in the repo root or the apps that will run (for dev):
 
 ```env
-DATABASE_URL=local.db
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/qrave
 BETTER_AUTH_SECRET=your-secret-key
-BETTER_AUTH_URL=http://localhost:3000
+BETTER_AUTH_URL=http://localhost:3001
 ```
 
 ## License
