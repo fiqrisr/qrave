@@ -1,8 +1,10 @@
+export { authController } from "./auth.controller";
+
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { openAPI, organization } from "better-auth/plugins";
-import * as schema from "../db";
-import { db } from "../db";
+import * as schema from "../../db";
+import { db } from "../../db";
 
 if (!process.env.BETTER_AUTH_SECRET) {
   throw new Error("BETTER_AUTH_SECRET is missing in .env");

@@ -1,5 +1,5 @@
 import { Elysia } from "elysia";
-import { auth } from "../auth";
+import { auth } from "../modules/auth";
 
 export const tenantGuard = new Elysia({ name: "tenantGuard" }).derive(
   { as: "scoped" },

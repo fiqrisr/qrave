@@ -1,11 +1,10 @@
 import { openapi } from "@elysiajs/openapi";
 import { Elysia } from "elysia";
-import { getAuthOpenAPISchema } from "./auth";
-import { authController } from "./modules/auth/auth.controller";
+import { authController, getAuthOpenAPISchema } from "./modules/auth";
 import { categoryController } from "./modules/category";
 import { productController } from "./modules/product";
-import { publicController } from "./modules/public/public.controller";
-import { ordersWs } from "./modules/ws/orders.ws";
+import { publicController } from "./modules/public";
+import { ordersWs } from "./modules/ws";
 
 // ─── Merge Better Auth OpenAPI spec into Elysia documentation ───────────────
 const authSchema = await getAuthOpenAPISchema();

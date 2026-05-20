@@ -1,5 +1,5 @@
 import { Elysia, t } from "elysia";
-import { auth } from "../../auth";
+import { auth } from "../auth";
 
 export const ordersWs = new Elysia().ws("/ws/orders", {
   query: t.Object({
