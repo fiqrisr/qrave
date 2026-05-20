@@ -7,7 +7,7 @@ export const ordersWs = new Elysia().ws("/ws/orders", {
   }),
   async open(ws) {
     const session = await auth.api.getSession({
-      headers: ws.data.headers,
+      headers: ws.data.headers as Record<string, string>,
     });
 
     if (!session) {
